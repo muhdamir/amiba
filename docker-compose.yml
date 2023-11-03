@@ -1,0 +1,20 @@
+version: '3.1'
+services:
+  db-service:
+    container_name: aham-capital-db-service
+    image: postgres
+    env_file:
+      - db.env
+    ports:
+      - 5432:5432
+  # api-service:
+  #   container_name: api-service
+  #   build:
+  #     context: .
+  #     dockerfile: ./docker/fastapi/dockerfile
+  #   env_file:
+  #     - .env
+  #   ports:
+  #     - 8080:8080
+  #   depends_on:
+  #     - db-service
