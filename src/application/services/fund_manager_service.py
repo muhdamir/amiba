@@ -6,6 +6,7 @@ from application.models.fund_manager_model import (
 )
 from persistence import FundManagerRepository
 
+from ..exceptions import EntryNotFoundError
 from .fund_manager_service_interface import FundManagerServiceInterface
 
 
@@ -22,15 +23,21 @@ class FundManagerService(
         return self.repository.get_all()
 
     def get_by_id(self, id: int):
-        return self.repository.get_by_id(id=id)
+        if entry := self.repository.get_by_id(id=id):
+            return entry
+        raise EntryNotFoundError(id=id)
 
     def create(self, data: FundManagerPostModel):
         dict_data = data.model_dump()
         return self.repository.create(data=dict_data)
 
     def update(self, id: int, data: FundManagerPatchModel):
+        # check id exist
+        self.get_by_id(id=id)
         dict_data = data.model_dump()
         return self.repository.update(id=id, data=dict_data)
 
     def delete(self, id: int):
+        # check id exist
+        self.get_by_id(id=id)
         return self.repository.delete(id=id)
