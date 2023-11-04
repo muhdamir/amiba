@@ -1,4 +1,4 @@
-from typing import Protocol, TypeVar, runtime_checkable
+from typing import Protocol, TypeVar, runtime_checkable, Generic
 from typing import Union
 from sqlalchemy.orm import Session
 
@@ -82,7 +82,7 @@ class Service(Protocol[T]):
     ]
 
 
-class ReadServiceMixin:
+class ReadServiceMixin(Generic[T]):
     def _get_all(self: Service):
         if isinstance(
             self.repository,

@@ -1,5 +1,5 @@
-from .core import CRUDServiceInterfaceMixin
 from ..models import FundPatchModel, FundPostModel
+from .core import CRUDServiceInterfaceMixin
 
 
 class FundServiceInterface(

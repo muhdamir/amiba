@@ -18,10 +18,7 @@ class StartupEvent:
         self._base = base
 
     def __call__(self) -> None:
-        # create db
-        # self._create_table()
         print("AHAM CAPITAL SERVICE STARTED")
-        ...
 
     def _create_table(self) -> None:
         self._base.metadata.create_all(bind=self._engine)

@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends
-from pydantic import conint
 
 from application.models import FundPatchModel, FundPostModel, FundResponseModel
 from application.services import FundService
@@ -25,10 +24,10 @@ async def get_all_fund(
 
 @fund_router.get(
     "/{fund_id}",
-    response_model=FundResponseModel | None,
+    response_model=FundResponseModel,
 )
 async def get_fund_by_id(
-    fund_id: conint(gt=0),
+    fund_id: int,
     service: FundService = Depends(),
 ):
     """
@@ -56,7 +55,7 @@ async def create_new_fund(
     response_model=FundResponseModel,
 )
 async def update_fund(
-    fund_id: conint(gt=0),
+    fund_id: int,
     data: FundPatchModel,
     service: FundService = Depends(),
 ):
@@ -71,10 +70,10 @@ async def update_fund(
     response_model=bool,
 )
 async def delete_fund_by_id(
-    fund_id: conint(gt=0),
+    fund_id: int,
     service: FundService = Depends(),
 ):
     """
-    Delet a fund by the given id
+    Delete a fund by the given id
     """
     return service.delete(fund_id)
