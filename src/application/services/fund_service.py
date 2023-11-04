@@ -16,8 +16,8 @@ class FundService(
     ) -> None:
         self.repository = repository
         # additional repository
-        self.fund_manager_repository = FundManagerRepository(
-            session=self.repository.session
+        self.fund_manager_repository = FundManagerRepository.from_existing_repository(
+            repository
         )
 
     def get_by_id(self, id: int):
