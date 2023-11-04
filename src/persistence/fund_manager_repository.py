@@ -23,3 +23,14 @@ class FundManagerRepository(
 
     def delete(self, id: int) -> bool:
         return self._delete(entity=FundManager, id=id)
+
+    # additional method
+    def get_by_email(
+        self,
+        email: str,
+        exclude_id: int | None = None,
+    ) -> list[FundManager]:
+        query = self.session.query(FundManager).filter_by(fund_manager_email=email)
+        if not exclude_id:
+            return query.all()
+        return query.filter(FundManager.fund_manager_id != exclude_id).all()

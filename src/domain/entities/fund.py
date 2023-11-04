@@ -1,13 +1,14 @@
 from datetime import date
+from typing import TYPE_CHECKING
 
 from sqlalchemy import ForeignKey, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base import Base
-from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .fund_manager import FundManager
+    from .fund_net_asset_value import FundNetAssetValue
 
 
 class Fund(Base):
@@ -15,13 +16,12 @@ class Fund(Base):
 
     # fields
     fund_id: Mapped[int] = mapped_column(primary_key=True)
-    fund_name: Mapped[str] = mapped_column(nullable=False)
+    fund_name: Mapped[str] = mapped_column(nullable=False, unique=True)
     fund_manager_id: Mapped[int] = mapped_column(
         ForeignKey("FUND_MANAGER.fund_manager_id", ondelete="CASCADE"),
         nullable=False,
     )
     fund_description: Mapped[str] = mapped_column(nullable=False)
-    fund_net_asset_value: Mapped[float] = mapped_column(nullable=False)
     fund_date_of_creation: Mapped[date] = mapped_column(
         nullable=False,
         default=func.current_date(),
@@ -35,3 +35,4 @@ class Fund(Base):
 
     # relationships
     fund_manager: Mapped["FundManager"] = relationship()
+    fund_net_asset_value: Mapped["FundNetAssetValue"] = relationship()

@@ -31,8 +31,8 @@ class FundPostModel(
 class FundPatchModel(
     BasePatchModel,
 ):
-    fund_name: str | None
-    fund_manager_id: int | None
-    fund_description: str | None
-    fund_net_asset_value: float | None
-    fund_performance: float | None
+    fund_name: str | None = None
+    fund_manager_id: int | None = None
+    fund_description: str | None = None
+    fund_net_asset_value: float | None = None
+    fund_performance: float | None = None

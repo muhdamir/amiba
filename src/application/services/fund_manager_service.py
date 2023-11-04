@@ -6,7 +6,7 @@ from application.models.fund_manager_model import (
 )
 from persistence import FundManagerRepository
 
-from ..exceptions import EntryNotFoundError
+from ..exceptions import EntryNotFoundError, InputNotUnique
 from .fund_manager_service_interface import FundManagerServiceInterface
 
 
@@ -28,13 +28,25 @@ class FundManagerService(
         raise EntryNotFoundError(id=id)
 
     def create(self, data: FundManagerPostModel):
+        # check email has been taken
+        if self.repository.get_by_email(email=data.fund_manager_email):
+            raise InputNotUnique(input=data.fund_manager_email)
+
         dict_data = data.model_dump()
         return self.repository.create(data=dict_data)
 
     def update(self, id: int, data: FundManagerPatchModel):
         # check id exist
-        self.get_by_id(id=id)
-        dict_data = data.model_dump()
+        current_data = self.get_by_id(id=id)
+        # check email has been taken
+        if data.fund_manager_email:
+            if self.repository.get_by_email(
+                email=data.fund_manager_email,
+                exclude_id=current_data.fund_manager_id,
+            ):
+                raise InputNotUnique(input=data.fund_manager_email)
+
+        dict_data = data.model_dump(exclude_unset=True)
         return self.repository.update(id=id, data=dict_data)
 
     def delete(self, id: int):

@@ -23,3 +23,10 @@ class FundRepository(
 
     def delete(self, id: int) -> bool:
         return self._delete(entity=Fund, id=id)
+
+    # additional method
+    def get_by_name(self, fund_name: str, exclude_id: int | None = None):
+        query = self.session.query(Fund).filter_by(fund_name=fund_name)
+        if not exclude_id:
+            return query.all()
+        return query.filter(Fund.fund_id != exclude_id).all()

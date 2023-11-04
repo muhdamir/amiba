@@ -16,7 +16,7 @@ class FundManager(Base):
     # fields
     fund_manager_id: Mapped[int] = mapped_column(primary_key=True)
     fund_manager_name: Mapped[str] = mapped_column(nullable=False)
-    fund_manager_email: Mapped[str] = mapped_column(nullable=False)
+    fund_manager_email: Mapped[str] = mapped_column(nullable=False, unique=True)
     date_created_on: Mapped[date] = mapped_column(default=func.current_date())
     date_updated_on: Mapped[date] = mapped_column(
         default=func.current_date(),

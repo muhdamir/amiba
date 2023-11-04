@@ -1,8 +1,8 @@
 from fastapi import Depends
 
-from persistence import FundRepository, FundManagerRepository
+from persistence import FundManagerRepository, FundRepository
 
-from ..exceptions import EntryNotFoundError
+from ..exceptions import EntryNotFoundError, InputNotUnique
 from ..models import FundPatchModel, FundPostModel
 from .fund_service_interface import FundServiceInterface
 
@@ -30,14 +30,25 @@ class FundService(
 
     def create(self, data: FundPostModel):
         # check fund manager id exists
-        if self.fund_manager_repository.get_by_id(id=data.fund_manager_id):
-            dict_data = data.model_dump()
-            return self.repository.create(data=dict_data)
-        raise EntryNotFoundError(id=data.fund_manager_id)
+        if not self.fund_manager_repository.get_by_id(id=data.fund_manager_id):
+            raise EntryNotFoundError(id=data.fund_manager_id)
+        # check fund name is taken
+        if self.repository.get_by_name(fund_name=data.fund_name):
+            raise InputNotUnique(input=data.fund_name)
+
+        dict_data = data.model_dump()
+        return self.repository.create(data=dict_data)
 
     def update(self, id: int, data: FundPatchModel):
         # check if id exists
-        self.get_by_id(id=id)
+        current_data = self.get_by_id(id=id)
+        # check fund name is taken
+        if data.fund_name:
+            if self.repository.get_by_name(
+                fund_name=data.fund_name,
+                exclude_id=current_data.fund_id,
+            ):
+                raise InputNotUnique(input=data.fund_name)
         dict_data = data.model_dump(exclude_unset=True)
         return self.repository.update(id=id, data=dict_data)
 

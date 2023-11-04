@@ -19,5 +19,5 @@ class FundManagerPostModel(BasePostModel):
 
 
 class FundManagerPatchModel(BasePatchModel):
-    fund_manager_name: str | None
-    fund_manager_email: EmailStr | None
+    fund_manager_name: str | None = None
+    fund_manager_email: EmailStr | None = None
