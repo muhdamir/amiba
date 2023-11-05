@@ -9,7 +9,7 @@ from application.models import (
 
 fund_manager_router = APIRouter(
     prefix="/fund_manager",
-    tags=["Fund Manager - Fund Manager Endpoints"],
+    tags=["Fund Manager - fund manager related endpoints"],
 )
 
 

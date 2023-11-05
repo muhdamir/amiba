@@ -1,2 +1,5 @@
 from .fund_manager_repository_interface import FundManagerRepositoryInteface
+from .fund_net_asset_value_data_repository_interface import (
+    FundNetAssetValueDataRepositoryInterface,
+)
 from .fund_repository_interface import FundRepositoryInterface

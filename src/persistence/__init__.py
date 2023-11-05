@@ -1,2 +1,3 @@
 from .fund_manager_repository import FundManagerRepository
+from .fund_net_asset_value_data_repository import FundNetAssetValueDataRepository
 from .fund_repository import FundRepository

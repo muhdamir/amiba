@@ -8,7 +8,7 @@ from .base import Base
 
 if TYPE_CHECKING:
     from .fund_manager import FundManager
-    from .fund_net_asset_value import FundNetAssetValue
+    from .fund_net_asset_value_data import FundNetAssetValueData
 
 
 class Fund(Base):
@@ -35,4 +35,4 @@ class Fund(Base):
 
     # relationships
     fund_manager: Mapped["FundManager"] = relationship()
-    fund_net_asset_value: Mapped["FundNetAssetValue"] = relationship()
+    fund_net_asset_value: Mapped["FundNetAssetValueData"] = relationship()

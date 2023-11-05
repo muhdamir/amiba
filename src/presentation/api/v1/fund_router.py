@@ -5,7 +5,7 @@ from application.services import FundService
 
 fund_router = APIRouter(
     prefix="/fund",
-    tags=["Fund - Fund Management Endpoints"],
+    tags=["Fund - fund related endpoints"],
 )
 
 

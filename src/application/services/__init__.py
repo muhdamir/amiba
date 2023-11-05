@@ -1,2 +1,3 @@
 from .fund_manager_service import FundManagerService
+from .fund_net_asset_value_data_service import FundNetAssetValueDataService
 from .fund_service import FundService

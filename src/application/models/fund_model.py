@@ -11,7 +11,7 @@ class FundResponseModel(
     fund_name: str
     fund_manager_id: int
     fund_description: str
-    fund_net_asset_value: float
+    # fund_net_asset_value: float
     fund_date_of_creation: date
     fund_date_of_update: date
     fund_performance: float
@@ -24,7 +24,7 @@ class FundPostModel(
     fund_name: str
     fund_manager_id: int
     fund_description: str
-    fund_net_asset_value: float
+    # fund_net_asset_value: float
     fund_performance: float
 
 
@@ -34,5 +34,5 @@ class FundPatchModel(
     fund_name: str | None = None
     fund_manager_id: int | None = None
     fund_description: str | None = None
-    fund_net_asset_value: float | None = None
+    # fund_net_asset_value: float | None = None
     fund_performance: float | None = None
