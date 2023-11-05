@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 
-from application.events import StartupEvent
 from application.exceptions import exception_handlers
 from presentation import api
 
