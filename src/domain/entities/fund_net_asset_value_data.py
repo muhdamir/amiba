@@ -31,4 +31,6 @@ class FundNetAssetValueData(Base):
     )
 
     # relationships
-    fund: Mapped["Fund"] = relationship()
+    fund: Mapped["Fund"] = relationship(
+        back_populates="fund_net_asset_value_data",
+    )

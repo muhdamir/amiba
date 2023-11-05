@@ -18,6 +18,7 @@ fund_net_asset_value_data_router = APIRouter(
     response_model=list[FundNetAssetValueDataResponseModel],
 )
 async def get_all_row_fund_nav_data(
+    fund_id: int | None = None,
     service: FundNetAssetValueDataService = Depends(),
 ):
     """

@@ -1,23 +1,21 @@
-from sqlalchemy import URL, create_engine
+from sqlalchemy import create_engine, URL
 from sqlalchemy.orm import sessionmaker
 
-from config import database, drivername, host, password, port, username
+# for testing purpose
 
 conn_str = URL.create(
-    drivername=drivername,
-    username=username,
-    password=password,
-    host=host,
-    database=database,
-    port=port,
+    drivername="postgresql",
+    username="admin",
+    password="Admin2023!",
+    host="localhost",
+    database="fund_management_db_test",
+    port=5432,
 )
 
 
 engine = create_engine(
     url=conn_str,
     pool_pre_ping=True,
-    echo=True,
-    echo_pool=True,
 )
 
 session_factory = sessionmaker(
@@ -26,10 +24,7 @@ session_factory = sessionmaker(
 )
 
 
-async def get_session():
-    """
-    To be used along with fastapi's dependency injection
-    """
+def get_session():
     session = session_factory()
     try:
         yield session

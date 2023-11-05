@@ -34,5 +34,10 @@ class Fund(Base):
     fund_performance: Mapped[float] = mapped_column(nullable=False)
 
     # relationships
-    fund_manager: Mapped["FundManager"] = relationship()
-    fund_net_asset_value: Mapped["FundNetAssetValueData"] = relationship()
+    fund_manager: Mapped["FundManager"] = relationship(
+        back_populates="funds",
+    )
+    fund_net_asset_value_data: Mapped["FundNetAssetValueData"] = relationship(
+        back_populates="fund",
+        cascade="all, delete",
+    )

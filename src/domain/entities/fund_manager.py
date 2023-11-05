@@ -26,4 +26,7 @@ class FundManager(Base):
     # relationships
     # when fund_manager is deleted, all child will be deleted
     # all, delete-orphan will deleted all child that is orphan (deassociated from its parent)
-    funds: Mapped[list["Fund"]] = relationship(cascade="all, delete")
+    funds: Mapped[list["Fund"]] = relationship(
+        cascade="all, delete",
+        back_populates="fund_manager",
+    )
