@@ -67,3 +67,6 @@ pytest
 ```
 ## Screenshots
 ![image](https://github.com/muhdamir/amiba/assets/62650104/b7860cde-358d-4e90-aeb2-bf0f180c87de)
+
+![image](https://github.com/muhdamir/amiba/assets/62650104/54fd0a24-cde9-48ce-b448-621f964100b9)
+
