@@ -23,3 +23,9 @@ class FundNetAssetValueDataRepository(
 
     def delete(self, id: int) -> bool:
         return self._delete(entity=FundNetAssetValueData, id=id)
+
+    # additional method
+    def get_by_fund_id(self, fund_id: int) -> list[FundNetAssetValueData]:
+        return (
+            self.session.query(FundNetAssetValueData).filter_by(fund_id=fund_id).all()
+        )

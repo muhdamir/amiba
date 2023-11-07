@@ -36,3 +36,9 @@ class FundNetAssetValueDataService(
 
     def delete(self, id: int):
         return self.repository.delete(id=id)
+
+    # additional method
+    def get_by_fund_id(self, fund_id: int | None):
+        if fund_id:
+            return self.repository.get_by_fund_id(fund_id=fund_id)
+        return self.get_all()

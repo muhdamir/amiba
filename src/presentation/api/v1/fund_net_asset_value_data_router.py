@@ -24,7 +24,7 @@ async def get_all_row_fund_nav_data(
     """
     Get all row fund NAV data, sorted by its name by default.
     """
-    return service.get_all()
+    return service.get_by_fund_id(fund_id=fund_id)
 
 
 @fund_net_asset_value_data_router.get(
