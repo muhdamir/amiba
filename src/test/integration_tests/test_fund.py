@@ -1,3 +1,4 @@
+import json
 from contextlib import contextmanager
 
 import pytest
@@ -11,6 +12,7 @@ from main import app
 
 from ..config import engine
 from ..config import get_session as get_session_testing
+from ..factory import FactoryFund, FactoryFundManager
 
 app.dependency_overrides[get_session] = get_session_testing
 
@@ -46,25 +48,21 @@ def test_get_fund_empty_array(fund_endpoint: str, init_database):
     assert response.json() == []
 
 
-def test_get_fund_with_entry(fund_endpoint, init_database, session: Session):
+def test_get_fund_with_entry(
+    fund_endpoint,
+    init_database,
+    session: Session,
+):
     # set FundManager
-    fund_manager = FundManager()
-    fund_manager.fund_manager_email = fake.email()
-    fund_manager.fund_manager_name = fake.name()
-    session.add(fund_manager)
-    session.commit()
-    session.refresh(fund_manager)
+    factory_fund_manager = FactoryFundManager(session=session)
+    fund_manager = factory_fund_manager()
 
     # set Fund
-    fund = Fund()
-    fund.fund_name = fake.name()
-    fund.fund_description = fake.text()
-    fund.fund_performance = fake.pyfloat()
-    fund.fund_manager_id = fund_manager.fund_manager_id
-
-    session.add(fund)
-    session.commit()
-    session.refresh(fund)
+    factory_fund = FactoryFund(
+        session=session,
+        fund_manager_id=fund_manager.fund_manager_id,
+    )
+    fund = factory_fund()
 
     valid_data = [
         {
@@ -88,3 +86,25 @@ def test_get_fund_with_entry(fund_endpoint, init_database, session: Session):
     response = client.get(fund_endpoint)
     assert response.status_code == 200
     assert response.json() == valid_data
+
+
+def test_create_fund(
+    fund_endpoint,
+    init_database,
+    session: Session,
+):
+    # set FundManager
+    factory_fund_manager = FactoryFundManager(session=session)
+    fund_manager = factory_fund_manager()
+
+    post_data = {
+        "fundName": "demo fund",
+        "fundManagerId": fund_manager.fund_manager_id,
+        "fundDescription": "string",
+        "fundPerformance": 0,
+    }
+
+    post_data = json.dumps(post_data)
+    a = client.post(fund_endpoint, data=post_data)
+    assert a.status_code == 200
+    assert a.json()["fundName"] == "demo fund"
