@@ -57,6 +57,8 @@ password=Admin2023! <br/>
 host=localhost <br/>
 port=5432
 
+Note that, once you added those two database, you run this command again `alembic upgrade head`
+
 ## Testing
 To run test for this project simply run the following command
 ```bash
