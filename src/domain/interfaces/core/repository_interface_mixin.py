@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Generic, TypeVar
+from typing import Generic, Sequence, TypeVar
 
 Entity = TypeVar("Entity")
 
@@ -21,7 +21,7 @@ class ReadRepositoryInterfaceMixin(
         ...
 
     @abstractmethod
-    def get_all(self) -> list[Entity]:
+    def get_all(self) -> Sequence[Entity]:
         ...
 
 
@@ -55,7 +55,7 @@ class UpdateRepositoryInterfaceMixin(
     """
 
     @abstractmethod
-    def update(self, id: int, data: dict) -> Entity:
+    def update(self, id: int, data: dict) -> Entity | None:
         ...
 
 

@@ -1,5 +1,6 @@
-from typing import Generic, Protocol, TypeVar
+from typing import Generic, Protocol, Sequence, TypeVar
 
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from domain.entities import Base
@@ -29,11 +30,18 @@ class ReadRepositoryMixin(Generic[Entity]):
     ...         return self._get_by_id(entity=AnEntity, id=id)
     """
 
-    def _get_by_id(self: Repository, entity: type[Entity], id: int):
-        return self.session.query(entity).get(ident=id)
+    def _get_by_id(
+        self: Repository,
+        entity: type[Entity],
+        id: int,
+    ) -> Entity | None:
+        return self.session.get(entity=entity, ident=id)
 
-    def _get_all(self: Repository, entity: type[Entity]):
-        return self.session.query(entity).all()
+    def _get_all(
+        self: Repository,
+        entity: type[Entity],
+    ) -> Sequence[Entity]:
+        return self.session.scalars(select(entity)).all()
 
 
 class CreateRepositoryMixin(Generic[Entity]):
@@ -48,7 +56,11 @@ class CreateRepositoryMixin(Generic[Entity]):
     ...         return self._create(entity=AnEntity, data=data)
     """
 
-    def _create(self: Repository, entity: type[Entity], data: dict):
+    def _create(
+        self: Repository,
+        entity: type[Entity],
+        data: dict,
+    ) -> Entity:
         new_entry = entity(**data)
         self.session.add(new_entry)
         self.session.commit()
@@ -68,10 +80,20 @@ class UpdateRepositoryMixin(Generic[Entity]):
     ...         return self._update(entity=AnEntity, data=data)
     """
 
-    def _update(self: Repository, entity: type[Entity], id: int, data: dict):
-        target_entry = self.session.query(entity).get(ident=id)
+    def _update(
+        self: Repository,
+        entity: type[Entity],
+        id: int,
+        data: dict,
+    ) -> Entity | None:
+        target_entry = self.session.get(entity=entity, ident=id)
+
+        if not target_entry:
+            return target_entry
+
         for field, value in data.items():
             setattr(target_entry, field, value)
+
         self.session.commit()
         self.session.refresh(target_entry)
         return target_entry
@@ -89,8 +111,16 @@ class DeleteRepositoryMixin(Generic[Entity]):
     ...         return self._delete(entity=AnEntity, id=id)
     """
 
-    def _delete(self: Repository, entity: type[Entity], id: int):
-        target_entry = self.session.query(entity).get(ident=id)
+    def _delete(
+        self: Repository,
+        entity: type[Entity],
+        id: int,
+    ) -> bool:
+        target_entry = self.session.get(entity=entity, ident=id)
+
+        if not target_entry:
+            return False
+
         self.session.delete(target_entry)
         return True
 
@@ -112,8 +142,3 @@ class CRUDRepositoryMixin(
     ...     def delete(self, id:int):
     ...         return self._delete(entity=AnEntity, id=id)
     """
-
-    def _delete(self: Repository, entity: type[Entity], id: int):
-        target_entry = self.session.query(entity).get(ident=id)
-        self.session.delete(target_entry)
-        return True

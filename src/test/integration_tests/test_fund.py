@@ -40,7 +40,10 @@ def session():
         yield test_session
 
 
-def test_get_fund_empty_array(fund_endpoint: str, init_database):
+def test_get_fund_empty_array(
+    fund_endpoint: str,
+    init_database,
+):
     response = client.get(fund_endpoint)
     # test status code
     assert response.status_code == 200
@@ -104,7 +107,6 @@ def test_create_fund(
         "fundPerformance": 0,
     }
 
-    post_data = json.dumps(post_data)
-    a = client.post(fund_endpoint, data=post_data)
+    a = client.post(fund_endpoint, json=post_data)
     assert a.status_code == 200
     assert a.json()["fundName"] == "demo fund"
