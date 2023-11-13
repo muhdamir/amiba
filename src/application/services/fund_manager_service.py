@@ -29,7 +29,7 @@ class FundManagerService(
         raise EntryNotFoundError(id=id)
 
     def create(self, data: FundManagerPostModel):
-        # check email has been taken
+        # check if email has been taken
         if self.repository.get_by_email(email=data.fund_manager_email):
             raise InputNotUnique(input=data.fund_manager_email)
 
@@ -37,13 +37,18 @@ class FundManagerService(
         return self.repository.create(data=dict_data)
 
     def update(self, id: int, data: FundManagerPatchModel):
-        # check email has been taken
-        if email := data.fund_manager_email:
-            if self.repository.get_by_email(
+        # check if email has been taken
+        email = data.fund_manager_email
+        email_exist = (
+            self.repository.get_by_email(
                 email=email,
                 exclude_id=id,
-            ):
-                raise InputNotUnique(input=email)
+            )
+            if email
+            else None
+        )
+        if email_exist and email:
+            raise InputNotUnique(input=email)
 
         dict_data = data.model_dump(exclude_unset=True)
 

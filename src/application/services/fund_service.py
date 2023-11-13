@@ -29,11 +29,11 @@ class FundService(
         return self.repository.get_all()
 
     def create(self, data: FundPostModel):
-        # check fund manager id exists
+        # check if fund manager id exists
         if not self.fund_manager_repository.get_by_id(id=data.fund_manager_id):
             raise EntryNotFoundError(id=data.fund_manager_id)
 
-        # check fund name is taken
+        # check if fund name is taken
         if self.repository.get_by_name(fund_name=data.fund_name):
             raise InputNotUnique(input=data.fund_name)
 
@@ -42,12 +42,17 @@ class FundService(
 
     def update(self, id: int, data: FundPatchModel):
         # check fund name is taken
-        if fund_name := data.fund_name:
-            if self.repository.get_by_name(
+        fund_name = data.fund_name
+        fund_name_exist = (
+            self.repository.get_by_name(
                 fund_name=fund_name,
                 exclude_id=id,
-            ):
-                raise InputNotUnique(input=fund_name)
+            )
+            if fund_name
+            else None
+        )
+        if fund_name_exist and fund_name:
+            raise InputNotUnique(input=fund_name)
 
         dict_data = data.model_dump(exclude_unset=True)
         if updated_data := self.repository.update(
